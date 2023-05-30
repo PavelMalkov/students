@@ -23,8 +23,8 @@ class ArticlesController {
     }
 
     async getArticlesPage(req, res) {
-        const { limit, page } = req.params
         try {
+            const { limit, page } = req.params
             const articles = await Article.findAll({
                 order: [
                     ['title', 'ASC'],
@@ -51,9 +51,9 @@ class ArticlesController {
         }
     }
     async updateArticle(req, res) {
-        const { id } = req.body
-        console.log(req.body)
         try {
+            const { id } = req.body
+            console.log(req.body)
             const article = await Article.update(
                 req.body,
                 {
@@ -66,11 +66,15 @@ class ArticlesController {
         }
     }
     async deleteArticle(req, res) {
-        const { id } = req.params
-        const article = await Article.destroy({
-            where: { id }
-        })
-        return res.json(article)
+        try {
+            const { id } = req.params
+            const article = await Article.destroy({
+                where: { id }
+            })
+            return res.json(article)
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 
