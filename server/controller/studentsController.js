@@ -3,14 +3,19 @@ const { Student } = require('../models')
 const ApiError = require('../error/ApiError')
 
 class StudentController {
-    async createStudent(req, res) {
-        // регулярные выражение const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-        // phone var pattern = /^(\+7)[0-9]{10}/,
-
+    async createStudent(req, res, next) {
         const { name, gender, age, course, email, phone } = req.body
-
-
-
+        // регулярные выражение 
+        // mail
+        const mail_mask = /^[a-zA-Z0-9._]+@[^\s@]+\.[^\s@]+$/
+        // phone
+        const phone_mask = /^((8|\+7)[\- ]?)?[\d\- ]{10}$/
+        let validationMail = mail_mask.test(email)
+        let validationPhone = phone_mask.test(phone)
+        console.log(validationMail, validationPhone)
+        if (!(validationMail && validationPhone)) {
+            return next(ApiError.badRequest({ message: "Не правельный ввод " + (validationMail ? ' ' : 'почты ') + (validationPhone ? '' : 'телефона') }))
+        }
 
         const student = await db.query(
             `INSERT INTO students (name,gender,age,course,email,phone) VALUES ('${name}','${gender}','${age}','${course}','${email}','${phone}');`)
