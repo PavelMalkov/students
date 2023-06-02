@@ -10,4 +10,6 @@ router.get('/:id', studentController.getStudent)
 
 router.put('/', studentController.updateStudent)
 
+router.delete('/:id', studentController.deleteStudent)
+
 module.exports = router

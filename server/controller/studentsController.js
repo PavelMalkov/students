@@ -13,6 +13,7 @@ class StudentController {
             const phone_mask = /^((8|\+7)[\- ]?)?[\d\- ]{10}$/
             let validationMail = mail_mask.test(email)
             let validationPhone = phone_mask.test(phone)
+            console.log(req.body)
             console.log(validationMail, validationPhone)
             if (!(validationMail && validationPhone)) {
                 return next(ApiError.badRequest({ message: "Не правельный ввод " + (validationMail ? ' ' : 'почты ') + (validationPhone ? '' : 'телефона') }))
