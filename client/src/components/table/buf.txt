@@ -1,0 +1,32 @@
+useEffect(() => {
+        if (gridApi) {
+            const dataSource = {
+                getRows: (params) => {
+                    gridApi.showLoadingOverlay();
+                    let page = params.endRow / perPage;
+
+                    console.log(page, perPage)
+                    try {
+                        fetch(`http://localhost:8080/api/students/page=${page}&limit=${perPage}`)
+                            .then(resp => resp.json())
+                            .then(res => {
+                                console.log(res)
+                                if (!res.length) {
+                                    gridApi.showNoRowsOverlay();
+                                }
+                                else {
+                                    gridApi.hideOverlay();
+                                }
+                                params.successCallback(res, total);
+                            }).catch(err => {
+                                gridApi.showNoRowsOverlay();
+                                params.successCallback([], 0);
+                            });
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            }
+            gridApi.setDatasource(dataSource);
+        }
+    }, [gridApi, total]);

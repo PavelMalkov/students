@@ -1,0 +1,75 @@
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import ruLocale from "date-fns/locale/ru";
+import { Typography, TextField, Grid, Button, FormControl } from '@mui/material';
+import { format, compareAsc } from 'date-fns'
+
+export const AddArticle = (props) => {
+
+    console.log(props.article)
+
+    const schema = yup.object().shape({
+        title: yup.string().required("введите название статьи"),
+        createdAt: yup.date().nullable().min(new Date(2022, 0, 1)),
+        studentId: yup.number().positive().integer().required(),
+    });
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }, // получение ошибок из useForm
+    } = useForm({
+        validationSchema: schema,
+    });
+
+    const onSubmit = (data) => {
+        console.log(data);
+
+        //addStudent(data)
+    };
+
+    return (
+        <FormControl sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <Typography variant="h5" style={{ textAlign: 'center' }}>Добавление студента</Typography>
+            <Grid container justifyContent="center" alignItems="stretch" gap={'20px'}>
+                <TextField
+                    fullWidth
+                    required
+                    name="title" // добавление name атрибута
+                    defaultValue={props.article?.title}
+                    label="Введите название статьи"
+                    onChange={() => register("title")}
+                />
+                <LocalizationProvider locale={ruLocale} dateAdapter={AdapterDateFns} >
+                    <DatePicker
+                        sx={{ width: '100%' }}
+                        label="Выберите дату"
+                        name="createdAt" // добавление name атрибута
+                        defaultValue={props.article?.date ? format(Date(props.article.createdAt), 'dd.MM.yyyy') : new Date()}
+                        onChange={() => register("createdAt")}
+                        inputVariant="outlined"
+                        format="dd.MM.yyyy"
+                    />
+                </LocalizationProvider>
+                {/* Написать отслеживаемый input через debouce и запросом к серверу на отрисовку подходящих студентов */}
+                <TextField
+                    type="number"
+                    fullWidth
+                    required
+                    name="studentId" // добавление name атрибута
+                    defaultValue={props.article?.studentId}
+                    label="Введите id студента"
+                    //error={errors.age}
+                    //helperText={!errors.age ? errors.age?.message : ''}
+                    onChange={() => register("studentId")}
+                />
+            </Grid>
+            <Button variant="contained" onClick={handleSubmit(onSubmit)}>добавить</Button>
+        </FormControl>
+
+    );
+};
+

@@ -1,5 +1,5 @@
 import HomePage from "../pages/HomePage";
-import Tables from "../pages/Tables";
+import TablesPage from "../pages/TablesPage";
 import HomeIcon from '@mui/icons-material/Home';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 
@@ -20,7 +20,7 @@ const appRoutes = [
   },
   {
     path: "/tables",
-    element: <Tables />,
+    element: <TablesPage />,
     state: "tables",
     sidebarProps: {
       displayText: "Таблицы",

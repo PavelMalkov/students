@@ -8,7 +8,7 @@ router.get('/', articlesController.getAllArticles)
 router.get('/page=:page&limit=:limit', articlesController.getArticlesPage)
 router.get('/:id', articlesController.getArticle)
 
-router.put('/', articlesController.updateArticle)
+router.patch('/', articlesController.updateArticle)
 
 router.delete('/:id', articlesController.deleteArticle)
 

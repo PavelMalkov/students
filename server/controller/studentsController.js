@@ -1,5 +1,5 @@
 const db = require('../db');
-const { Student } = require('../models')
+const { Student, Article } = require('../models')
 const ApiError = require('../error/ApiError')
 
 class StudentController {
@@ -22,8 +22,8 @@ class StudentController {
             const student = await db.query(
                 `INSERT INTO students (name,gender,age,course,email,phone) VALUES ('${name}','${gender}','${age}','${course}','${email}','${phone}');`)
             return res.json(student)
-        } catch (error) {
-            console.log(error)
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
         }
     }
     async getStudent(req, res, next) {
@@ -34,22 +34,23 @@ class StudentController {
             })
             return res.json(student)
         } catch (e) {
-            console.log(e)
+            next(ApiError.badRequest(e.message))
         }
     }
     async getAllStudents(req, res, next) {
         try {
-            const student = await db.query(`select * from students order by name asc;`)
+
+            const student = await db.query(`select * from students order by name asc;`) //
             return res.json(student)
         } catch (e) {
-            console.log(e)
+            next(ApiError.badRequest(e.message))
         }
     }
 
-    async getStudentsPage(req, res) {
+    async getStudentsPage(req, res, next) {
         const { limit, page } = req.params
         try {
-            const students = await Student.findAll({
+            const students = await Student.findAndCountAll({
                 order: [
                     ['name', 'ASC'],
                 ],
@@ -58,10 +59,10 @@ class StudentController {
             })
             return res.json(students)
         } catch (e) {
-            console.log(e)
+            next(ApiError.badRequest(e.message))
         }
     }
-    async updateStudent(req, res) {
+    async updateStudent(req, res, next) {
         try {
             const { id } = req.body
             console.log(req.body)
@@ -73,18 +74,21 @@ class StudentController {
             )
             return res.json(student)
         } catch (e) {
-            console.log(e)
+            next(ApiError.badRequest(e.message))
         }
     }
-    async deleteStudent(req, res) {
+    async deleteStudent(req, res, next) {
         try {
             const { id } = req.params
+            await Article.destroy({
+                where: { studentId: id }
+            })
             const student = await Student.destroy({
                 where: { id }
             })
             return res.json(student)
         } catch (e) {
-            console.log(e)
+            next(ApiError.badRequest(e.message))
         }
     }
 }
