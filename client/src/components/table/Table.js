@@ -24,6 +24,10 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
         }
     }, []);
 
+    const updateItems = useCallback(() => {
+        gridRef.current.api.refreshInfiniteCache();
+    }, [])
+
     const deleteItems = useCallback(() => {
         try {
             // запрос на сервер на добавление данных || надо написать
@@ -120,6 +124,7 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
                 <Button variant="contained" onClick={handleOpenAdd}>{nameAdd}</Button>
                 <Button disabled={isCanClick} variant="contained" onClick={handleOpenArticle}>{nameUpdate}</Button>
                 <Button disabled={isCanClick} variant="contained" onClick={deleteItems}>{nameDelete}</Button>
+                <Button variant="contained" onClick={updateItems}>обновить</Button>
             </Box>
             <div style={gridStyle} className="ag-theme-alpine">
                 <AgGridReact
