@@ -14,7 +14,7 @@ const appRoutes = [
     element: <HomePage />,
     state: "installation",
     sidebarProps: {
-      displayText: "Что-то",
+      displayText: "Описание",
       icon: <HomeIcon />
     }
   },

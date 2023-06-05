@@ -1,0 +1,31 @@
+.nav-items {
+  padding: 4px 12px 4px 24px;
+  color: white;
+  display: flex;
+  width: 100%;
+
+  align-items: center;
+  justify-content: left;
+}
+
+.nav-items .active svg {
+  color: #3f8cff;
+}
+
+.nav-items a {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  text-decoration: none;
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px;
+  color: white;
+}
+
+.nav-items .active {
+  width: 100%;
+  color: #3f8cff;
+  background-color: white;
+  border-radius: 12px;
+}

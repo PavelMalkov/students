@@ -30,18 +30,19 @@ const Sidebar = () => {
             direction="row"
             justifyContent="center"
           >
-            <Avatar src={assets.images.logo} />
+            <Avatar sx={{ backgroundColor: 'white', borderRadius: '8px' }} src={assets.images.logo} />
           </Stack>
         </Toolbar>
-        {appRoutes.map((route, index) => (
-          route.sidebarProps ? (
-            route.child ? (
-              <SidebarItemCollapse item={route} key={index} />
-            ) : (
-              <SidebarItem item={route} key={index} />
-            )
-          ) : null
-        ))}
+        {
+          appRoutes.map((route, index) => (
+            route.sidebarProps ? (
+              route.child ? (
+                <SidebarItemCollapse item={route} key={index} />
+              ) : (
+                <SidebarItem item={route} key={index} />
+              )
+            ) : null
+          ))}
       </List>
     </Drawer>
   );

@@ -25,27 +25,39 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
     }, []);
 
     const deleteItems = useCallback(() => {
-        // запрос на сервер на добавление данных || надо написать
-        let SelectedRows = gridRef.current.api.getSelectedRows();
+        try {
+            // запрос на сервер на добавление данных || надо написать
+            let SelectedRows = gridRef.current.api.getSelectedRows();
 
-        console.log(SelectedRows[0].id)
+            console.log(SelectedRows[0].id)
 
-        ServerApi.delete(SelectedRows[0].id).then(res => console.log(res))
-        setTotal(total - 1)
-        gridRef.current.api.refreshInfiniteCache();
+            ServerApi.delete(SelectedRows[0].id).then(res => console.log(res))
+            setTotal(total - 1)
+            gridRef.current.api.refreshInfiniteCache();
+        } catch (error) {
+            console.log({ message: `Ошибка  ${error.name} :  ${error.message}` })
+        }
     }, [])
 
 
     const add = useCallback((data) => {
-        console.log(data)
-        ServerApi.add(data)
-        gridRef.current.api.refreshInfiniteCache();
+        try {
+            console.log(data)
+            ServerApi.add(data)
+            gridRef.current.api.refreshInfiniteCache();
+        } catch (error) {
+            console.log({ message: `Ошибка  ${error.name} :  ${error.message}` })
+        }
     }, [])
 
     const update = useCallback((data) => {
-        data.id = gridRef.current.api.getSelectedRows()[0].id;
-        ServerApi.update(data)
-        gridRef.current.api.refreshInfiniteCache();
+        try {
+            data.id = gridRef.current.api.getSelectedRows()[0].id;
+            ServerApi.update(data)
+            gridRef.current.api.refreshInfiniteCache();
+        } catch (error) {
+            console.log({ message: `Ошибка  ${error.name} :  ${error.message}` })
+        }
     }, [])
 
     const onGridReady = useCallback((params) => {
@@ -72,13 +84,18 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
                             params.successCallback([], 0);
                         });
                 } catch (error) {
-                    console.log(error)
+                    console.log({ message: `Ошибка  ${error.name} :  ${error.message}` })
                 }
             }
         }
 
         params.api.setDatasource(dataSource);
     }, []);
+
+    useMemo(() => {
+        if (gridRef.current?.api.getSelectedRows()[0].id) return true
+        else return false
+    }, [gridRef])
 
     const [isOpenAdd, setIsOpenAdd] = useState(false);
     const handleOpenAdd = () => setIsOpenAdd(true);
@@ -87,6 +104,13 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const handleOpenArticle = () => setIsOpenUpdate(true);
     const handleCloseArticle = () => setIsOpenUpdate(false);
+
+    const chancheVisibleButton = () => {
+        const selectedRows = gridRef.current?.api.getSelectedRows();
+        setIsCanClick(!selectedRows?.length);
+    }
+
+    const [isCanClick, setIsCanClick] = useState(true)
 
     return (
         <div style={{ ...containerStyle, paddingBottom: '20px' }}>
@@ -98,8 +122,8 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
             </OpenModal>
             <Box sx={{ display: 'flex', gap: '20px' }}>
                 <Button variant="contained" onClick={handleOpenAdd}>{nameAdd}</Button>
-                <Button variant="contained" onClick={handleOpenArticle}>{nameUpdate}</Button>
-                <Button variant="contained" onClick={deleteItems}>{nameDelete}</Button>
+                <Button disabled={isCanClick} variant="contained" onClick={handleOpenArticle}>{nameUpdate}</Button>
+                <Button disabled={isCanClick} variant="contained" onClick={deleteItems}>{nameDelete}</Button>
             </Box>
             <div style={gridStyle} className="ag-theme-alpine">
                 <AgGridReact
@@ -115,10 +139,11 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
                     infiniteInitialRowCount={150}
                     maxBlocksInCache={10}
                     onGridReady={onGridReady}
+                    onSelectionChanged={chancheVisibleButton}
                 >
                 </AgGridReact>
             </div>
-        </div>
+        </div >
     );
 }
 export default Table; 

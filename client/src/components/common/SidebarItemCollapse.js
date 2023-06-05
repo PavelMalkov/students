@@ -4,19 +4,10 @@ import colorConfigs from "../../configs/colorConfigs";
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import SidebarItem from "./SidebarItem";
-import { useSelector } from "react-redux";
 
 
 const SidebarItemCollapse = (item) => {
   const [open, setOpen] = useState(false);
-
-  const { appState } = useSelector((RootState) => appState);
-
-  useEffect(() => {
-    if (appState.includes(item.state)) {
-      setOpen(true);
-    }
-  }, [appState, item]);
 
   return (
     item.sidebarProps ? (
