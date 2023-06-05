@@ -52,6 +52,7 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
 
     const update = useCallback((data) => {
         try {
+            console.log(data)
             data.id = gridRef.current.api.getSelectedRows()[0].id;
             ServerApi.update(data)
             gridRef.current.api.refreshInfiniteCache();
@@ -91,11 +92,6 @@ const Table = ({ ServerApi, columnDefs, AddForm, nameAdd, nameUpdate, nameDelete
 
         params.api.setDatasource(dataSource);
     }, []);
-
-    useMemo(() => {
-        if (gridRef.current?.api.getSelectedRows()[0].id) return true
-        else return false
-    }, [gridRef])
 
     const [isOpenAdd, setIsOpenAdd] = useState(false);
     const handleOpenAdd = () => setIsOpenAdd(true);

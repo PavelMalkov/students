@@ -26,7 +26,7 @@ export const AddStudent = (props) => {
     });
 
     const onSubmit = (data) => {
-        //console.log(data);
+        console.log(data);
         props.callback(data)
     };
 
