@@ -5,12 +5,7 @@ import BackupTableIcon from '@mui/icons-material/BackupTable';
 
 const appRoutes = [
   {
-    index: true,
-    element: <HomePage />,
-    state: "home"
-  },
-  {
-    path: "/home",
+    path: "/",
     element: <HomePage />,
     state: "installation",
     sidebarProps: {
