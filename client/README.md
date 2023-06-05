@@ -1,3 +1,7 @@
+npm start - запускает
+в папке server - сервер часть
+в папке client - клиентскую часть
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
